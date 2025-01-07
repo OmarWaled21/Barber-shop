@@ -12,7 +12,7 @@ class LoadingView extends StatelessWidget {
       body: Center(
         child: SizedBox(
           height: context.screenHeight * 0.3,
-          child: LoadingIndicator(
+          child: const LoadingIndicator(
             indicatorType: Indicator.ballTrianglePath,
             colors: [
               KColors.mainColor,

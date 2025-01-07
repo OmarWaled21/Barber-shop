@@ -6,22 +6,34 @@ class CustomTextFormField extends StatelessWidget {
     super.key,
     required this.title,
     this.textEditingController,
+    this.keyboardType = TextInputType.text,
   });
 
   final String title;
   final TextEditingController? textEditingController;
+  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       validator: (value) {
-        if (value == null) {
+        if (value == null || value.isEmpty) {
           return 'Field required';
         }
+        if (keyboardType == TextInputType.emailAddress) {
+          if (!value.contains('@')) {
+            return 'Missing @';
+          }
+          if (!value.contains('.com')) {
+            return 'Missing .com';
+          }
+        }
+
         return null;
       },
       controller: textEditingController,
       cursorColor: KColors.darkerYellowColor,
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),

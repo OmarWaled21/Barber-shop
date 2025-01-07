@@ -24,8 +24,11 @@ class _CustomTextFormFieldPasswordState
   Widget build(BuildContext context) {
     return TextFormField(
       validator: (value) {
-        if (value == null) {
+        if (value == null || value.isEmpty) {
           return 'Field required';
+        }
+        if (value.length < 8) {
+          return 'Password must be 8 character';
         }
         return null;
       },
