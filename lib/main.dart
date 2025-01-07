@@ -1,9 +1,11 @@
 import 'package:barber_shop/cubits/branch_cubit/branch_cubit.dart';
+import 'package:barber_shop/helper/simple_bloc_opserver.dart';
 import 'package:barber_shop/views/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
+  Bloc.observer = SimpleBlocOpserver();
   runApp(const MyApp());
 }
 
