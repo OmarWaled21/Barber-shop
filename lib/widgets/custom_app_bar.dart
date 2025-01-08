@@ -1,4 +1,3 @@
-import 'package:barber_shop/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget {
@@ -7,22 +6,35 @@ class CustomAppBar extends StatelessWidget {
     this.leading,
     this.actions,
     required this.title,
-    this.color = KColors.mainColor,
+    this.color,
+    this.centerTitle = true,
+    this.titleSize = 25,
+    this.titleColor = Colors.black,
   });
 
   final Widget? leading;
   final List<Widget>? actions;
   final String title;
-  final Color color;
+  final Color? color;
+  final bool centerTitle;
+  final double titleSize;
+  final Color titleColor;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       leading: leading,
       actions: actions,
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-      centerTitle: true,
-      backgroundColor: KColors.mainColor,
+      title: Text(
+        title,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: titleSize,
+          color: titleColor,
+        ),
+      ),
+      centerTitle: centerTitle,
+      backgroundColor: color,
     );
   }
 }

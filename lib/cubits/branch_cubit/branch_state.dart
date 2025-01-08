@@ -7,8 +7,6 @@ final class BranchInitial extends BranchState {}
 
 final class BranchLoading extends BranchState {}
 
-final class BranchUnauthorized extends BranchState {}
-
 final class BranchAssigned extends BranchState {}
 
 final class BranchNotAssigned extends BranchState {}
