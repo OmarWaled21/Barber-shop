@@ -2,6 +2,7 @@ import 'package:barber_shop/helper/media_query_extention.dart';
 import 'package:barber_shop/helper/navigator_extention.dart';
 import 'package:barber_shop/widgets/custom_app_bar.dart';
 import 'package:barber_shop/widgets/custom_button.dart';
+import 'package:barber_shop/widgets/order_number.dart';
 import 'package:barber_shop/widgets/row_confirm_section.dart';
 import 'package:flutter/material.dart';
 
@@ -29,19 +30,7 @@ class ConfirmView extends StatelessWidget {
                   EdgeInsets.symmetric(horizontal: context.screenWidth * 0.07),
               child: ListView(
                 children: [
-                  const Center(
-                    child: Text(
-                      '1',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 25),
-                    ),
-                  ),
-                  Divider(
-                    indent: context.screenWidth * 0.4,
-                    endIndent: context.screenWidth * 0.4,
-                    thickness: 1.5,
-                    color: Colors.black,
-                  ),
+                  const OrderNumber(),
                   const Padding(
                     padding: EdgeInsets.only(top: 10, bottom: 2.5),
                     child: RowConfirmSection(

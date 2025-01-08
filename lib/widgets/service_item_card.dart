@@ -15,7 +15,7 @@ class ServiceItemCard extends StatelessWidget {
           horizontal: context.screenWidth * 0.03,
         ),
         child: Padding(
-          padding: const EdgeInsets.all(15),
+          padding: const EdgeInsets.all(0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [

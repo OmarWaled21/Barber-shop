@@ -32,46 +32,43 @@ class _HomeBodyState extends State<HomeBody>
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            TabBar(
+      child: Column(
+        children: [
+          TabBar(
+            controller: _tabController,
+            indicator: const BoxDecoration(
+              color: KColors.scaffoldBackGroundColor,
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+            ),
+            indicatorSize: TabBarIndicatorSize.tab,
+            dividerColor: Colors.transparent,
+            labelStyle: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+            unselectedLabelStyle: const TextStyle(
+              color: KColors.greyColor,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+            tabs: const [
+              Tab(text: 'Services'),
+              Tab(text: 'Shop'),
+            ],
+          ),
+          SizedBox(
+            width: context.screenWidth,
+            height: context.screenHeight * 0.74,
+            child: TabBarView(
               controller: _tabController,
-              indicator: BoxDecoration(
-                color: KColors.scaffoldBackGroundColor,
-                borderRadius: _tabController.index == 0
-                    ? const BorderRadius.only(bottomRight: Radius.circular(20))
-                    : const BorderRadius.only(bottomLeft: Radius.circular(20)),
-              ),
-              indicatorSize: TabBarIndicatorSize.tab,
-              dividerColor: Colors.transparent,
-              labelStyle: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-              unselectedLabelStyle: const TextStyle(
-                color: KColors.greyColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-              tabs: const [
-                Tab(text: 'Services'),
-                Tab(text: 'Shop'),
+              children: [
+                const HomeServiceBody(),
+                const HomeShopBody(),
               ],
             ),
-            SizedBox(
-              width: context.screenWidth,
-              height: context.screenHeight * 0.74,
-              child: const TabBarView(
-                children: [
-                  HomeServiceBody(),
-                  HomeShopBody(),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
