@@ -1,3 +1,4 @@
+import 'package:barber_shop/helper/media_query_extention.dart';
 import 'package:flutter/material.dart';
 
 class TimeSlotSelector extends StatefulWidget {
@@ -25,7 +26,11 @@ class _TimeSlotSelectorState extends State<TimeSlotSelector> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.only(
+        left: context.screenWidth * 0.03,
+        right: context.screenWidth * 0.03,
+        bottom: context.screenHeight * 0.005,
+      ),
       child: Card(
         elevation: 0,
         child: GridView.builder(

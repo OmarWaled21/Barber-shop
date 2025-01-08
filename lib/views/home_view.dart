@@ -10,13 +10,11 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       backgroundColor: KColors.backGroundColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            HomeAppBar(),
-            HomeBody(),
-          ],
-        ),
+      body: Column(
+        children: [
+          HomeAppBar(),
+          HomeBody(),
+        ],
       ),
     );
   }

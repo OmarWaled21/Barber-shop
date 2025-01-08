@@ -19,11 +19,11 @@ class _DaySelectorState extends State<DaySelector> {
       child: Card(
         margin: EdgeInsets.symmetric(
           horizontal: context.screenWidth * 0.05,
-          vertical: context.screenHeight * 0.01,
+          // vertical: context.screenHeight * 0.01,
         ),
         elevation: 5.0,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
               const HeaderRow(),
