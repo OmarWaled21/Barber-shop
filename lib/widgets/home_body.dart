@@ -1,7 +1,7 @@
 import 'package:barber_shop/constants/colors.dart';
 import 'package:barber_shop/helper/media_query_extention.dart';
-import 'package:barber_shop/widgets/service_home_gid_view.dart';
-import 'package:barber_shop/widgets/shop_home_gid_view.dart';
+import 'package:barber_shop/widgets/home_service_body.dart';
+import 'package:barber_shop/widgets/home_shop_body.dart';
 import 'package:flutter/material.dart';
 
 class HomeBody extends StatefulWidget {
@@ -62,11 +62,11 @@ class _HomeBodyState extends State<HomeBody>
             ),
             SizedBox(
               width: context.screenWidth,
-              height: context.screenHeight * 0.7,
+              height: context.screenHeight * 0.74,
               child: const TabBarView(
                 children: [
-                  ServiceHomeGridView(),
-                  ShopHomeGridView(),
+                  HomeServiceBody(),
+                  HomeShopBody(),
                 ],
               ),
             ),
