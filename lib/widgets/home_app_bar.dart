@@ -24,9 +24,10 @@ class HomeAppBar extends StatelessWidget {
           ],
         ),
         Container(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          padding:
+              EdgeInsets.only(left: context.screenWidth * 0.04, bottom: 20),
+          color: KColors.scaffoldBackGroundColor,
           width: context.screenWidth,
-          padding: EdgeInsets.only(left: context.screenWidth * 0.04),
           child: const Text(
             'Omar !',
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),

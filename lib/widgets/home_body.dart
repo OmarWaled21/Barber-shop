@@ -62,7 +62,7 @@ class _HomeBodyState extends State<HomeBody>
             ),
             SizedBox(
               width: context.screenWidth,
-              height: context.screenHeight * 0.77,
+              height: context.screenHeight * 0.7,
               child: const TabBarView(
                 children: [
                   ServiceHomeGridView(),
