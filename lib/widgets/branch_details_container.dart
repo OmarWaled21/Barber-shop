@@ -1,11 +1,15 @@
 import 'package:barber_shop/constants/assets.gen.dart';
 import 'package:barber_shop/constants/colors.dart';
 import 'package:barber_shop/helper/media_query_extention.dart';
+import 'package:barber_shop/models/branch_model.dart';
+import 'package:barber_shop/services/branch_services.dart';
 import 'package:flutter/material.dart';
 
 class BranchDetailsContainer extends StatelessWidget {
-  const BranchDetailsContainer({super.key, required this.isSelected});
+  const BranchDetailsContainer(
+      {super.key, required this.isSelected, required this.branch});
   final bool isSelected;
+  final BranchModel branch;
 
   @override
   Widget build(BuildContext context) {
@@ -30,17 +34,17 @@ class BranchDetailsContainer extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Cairo',
-                  style: TextStyle(
+                Text(
+                  branch.govern,
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(height: context.screenHeight * 0.005),
-                const Text(
-                  'Obour fourth ditrict',
-                  style: TextStyle(
+                Text(
+                  branch.desc,
+                  style: const TextStyle(
                     fontSize: 15,
                   ),
                 ),
@@ -48,10 +52,8 @@ class BranchDetailsContainer extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: () {
-              // openMapsSheet(
-              //     context, branch['lat'], branch['lng']);
-            },
+            onPressed: () =>
+                BranchServices().openMapsSheet(context, branch.lat, branch.lng),
             iconSize: 40,
             icon: Icon(
               Icons.location_on,

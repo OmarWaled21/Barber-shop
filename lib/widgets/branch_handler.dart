@@ -10,6 +10,9 @@ class BranchHandler extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future.microtask(() {
+      context.read<InitializeCubit>().checkUserAssigned();
+    });
     return BlocBuilder<InitializeCubit, InitializeState>(
       builder: (context, state) {
         if (state is InitializeLoading) {

@@ -37,7 +37,7 @@ class ConfirmView extends StatelessWidget {
                   BlocBuilder<InitializeCubit, InitializeState>(
                     builder: (context, state) {
                       UserModel user =
-                          BlocProvider.of<InitializeCubit>(context).userInfo;
+                          BlocProvider.of<InitializeCubit>(context).userModel;
 
                       return Padding(
                         padding: const EdgeInsets.only(top: 10, bottom: 2.5),

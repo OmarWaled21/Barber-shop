@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => InitializeCubit()..checkUserAssigned(),
+      create: (context) => InitializeCubit(),
       child: MaterialApp(
         title: 'Barber Shop',
         theme: ThemeData(fontFamily: 'OpenSans'),

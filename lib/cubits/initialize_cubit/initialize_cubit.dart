@@ -10,7 +10,12 @@ part 'initialize_state.dart';
 class InitializeCubit extends Cubit<InitializeState> {
   InitializeCubit() : super(InitializeInitial());
 
-  late UserModel userInfo;
+  late UserModel userModel;
+
+  void assignUserModel(UserModel user) {
+    userModel = user;
+    emit(InitializeAssigned(userModel: userModel));
+  }
 
   Future<void> checkUserAssigned() async {
     emit(InitializeLoading());
@@ -34,9 +39,7 @@ class InitializeCubit extends Cubit<InitializeState> {
       final userData = userDoc.data() as Map<String, dynamic>?;
 
       // Create UserModel instance from Firestore data
-      final UserModel userModel = UserModel.fromJson(userData);
-
-      userInfo = userModel;
+      userModel = UserModel.fromJson(userData);
 
       // Emit the BranchAssigned state with the UserModel
       emit(InitializeAssigned(userModel: userModel));
