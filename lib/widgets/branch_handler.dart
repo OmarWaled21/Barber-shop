@@ -1,4 +1,4 @@
-import 'package:barber_shop/cubits/branch_cubit/branch_cubit.dart';
+import 'package:barber_shop/cubits/initialize_cubit/initialize_cubit.dart';
 import 'package:barber_shop/views/home_view.dart';
 import 'package:barber_shop/views/loading_view.dart';
 import 'package:barber_shop/views/login_view.dart';
@@ -10,11 +10,11 @@ class BranchHandler extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BranchCubit, BranchState>(
+    return BlocBuilder<InitializeCubit, InitializeState>(
       builder: (context, state) {
-        if (state is BranchLoading) {
+        if (state is InitializeLoading) {
           return const LoadingView();
-        } else if (state is BranchAssigned) {
+        } else if (state is InitializeAssigned) {
           return const HomeView();
         } else {
           return const LoginView();

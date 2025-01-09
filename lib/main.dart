@@ -1,4 +1,4 @@
-import 'package:barber_shop/cubits/branch_cubit/branch_cubit.dart';
+import 'package:barber_shop/cubits/initialize_cubit/initialize_cubit.dart';
 import 'package:barber_shop/firebase_options.dart';
 import 'package:barber_shop/helper/simple_bloc_opserver.dart';
 import 'package:barber_shop/widgets/branch_handler.dart';
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => BranchCubit()..checkUserBranch(),
+      create: (context) => InitializeCubit()..checkUserAssigned(),
       child: MaterialApp(
         title: 'Barber Shop',
         theme: ThemeData(fontFamily: 'OpenSans'),

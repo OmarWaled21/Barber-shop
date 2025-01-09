@@ -1,5 +1,5 @@
 import 'package:barber_shop/constants/colors.dart';
-import 'package:barber_shop/cubits/branch_cubit/branch_cubit.dart';
+import 'package:barber_shop/cubits/initialize_cubit/initialize_cubit.dart';
 import 'package:barber_shop/helper/media_query_extention.dart';
 import 'package:barber_shop/models/user_model.dart';
 import 'package:barber_shop/widgets/custom_app_bar.dart';
@@ -26,9 +26,9 @@ class HomeAppBar extends StatelessWidget {
             ),
           ],
         ),
-        BlocBuilder<BranchCubit, BranchState>(
+        BlocBuilder<InitializeCubit, InitializeState>(
           builder: (context, state) {
-            UserModel user = BlocProvider.of<BranchCubit>(context).userInfo;
+            UserModel user = BlocProvider.of<InitializeCubit>(context).userInfo;
 
             return Container(
               padding:

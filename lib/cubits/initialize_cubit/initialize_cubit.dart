@@ -5,19 +5,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-part 'branch_state.dart';
+part 'initialize_state.dart';
 
-class BranchCubit extends Cubit<BranchState> {
-  BranchCubit() : super(BranchInitial());
+class InitializeCubit extends Cubit<InitializeState> {
+  InitializeCubit() : super(InitializeInitial());
 
   late UserModel userInfo;
 
-  Future<void> checkUserBranch() async {
-    emit(BranchLoading());
+  Future<void> checkUserAssigned() async {
+    emit(InitializeLoading());
     try {
       final User? user = FirebaseAuth.instance.currentUser;
       if (user == null) {
-        emit(BranchNotAssigned());
+        emit(InitializeNotAssigned());
         return;
       }
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
@@ -26,7 +26,7 @@ class BranchCubit extends Cubit<BranchState> {
           .get();
 
       if (!userDoc.exists || userDoc.data() == null) {
-        emit(BranchNotAssigned());
+        emit(InitializeNotAssigned());
         return;
       }
 
@@ -39,9 +39,9 @@ class BranchCubit extends Cubit<BranchState> {
       userInfo = userModel;
 
       // Emit the BranchAssigned state with the UserModel
-      emit(BranchAssigned(userModel: userModel));
+      emit(InitializeAssigned(userModel: userModel));
     } catch (e) {
-      emit(Branchfailure(errMsg: e.toString()));
+      emit(Initializefailure(errMsg: e.toString()));
     }
   }
 }

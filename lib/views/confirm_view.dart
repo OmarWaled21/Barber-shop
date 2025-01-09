@@ -1,10 +1,13 @@
+import 'package:barber_shop/cubits/initialize_cubit/initialize_cubit.dart';
 import 'package:barber_shop/helper/media_query_extention.dart';
 import 'package:barber_shop/helper/navigator_extention.dart';
+import 'package:barber_shop/models/user_model.dart';
 import 'package:barber_shop/widgets/custom_app_bar.dart';
 import 'package:barber_shop/widgets/custom_button.dart';
 import 'package:barber_shop/widgets/order_number.dart';
 import 'package:barber_shop/widgets/row_confirm_section.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ConfirmView extends StatelessWidget {
   const ConfirmView({super.key});
@@ -31,12 +34,19 @@ class ConfirmView extends StatelessWidget {
               child: ListView(
                 children: [
                   const OrderNumber(),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 10, bottom: 2.5),
-                    child: RowConfirmSection(
-                      title: 'Name',
-                      value: 'Omar Waled',
-                    ),
+                  BlocBuilder<InitializeCubit, InitializeState>(
+                    builder: (context, state) {
+                      UserModel user =
+                          BlocProvider.of<InitializeCubit>(context).userInfo;
+
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 2.5),
+                        child: RowConfirmSection(
+                          title: 'Name',
+                          value: user.name,
+                        ),
+                      );
+                    },
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 2.5),
