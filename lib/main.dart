@@ -1,7 +1,7 @@
 import 'package:barber_shop/cubits/branch_cubit/branch_cubit.dart';
 import 'package:barber_shop/firebase_options.dart';
 import 'package:barber_shop/helper/simple_bloc_opserver.dart';
-import 'package:barber_shop/views/home_view.dart';
+import 'package:barber_shop/views/login_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         title: 'Barber Shop',
         theme: ThemeData(fontFamily: 'OpenSans'),
         debugShowCheckedModeBanner: false,
-        home: const HomeView(),
+        home: const LoginView(),
       ),
     );
   }

@@ -8,4 +8,23 @@ extension NavigatorExtention on BuildContext {
   void pop() {
     Navigator.pop(this);
   }
+
+  void pushReplacement(Widget page) {
+    Navigator.pushReplacement(
+      this,
+      MaterialPageRoute(
+        builder: (context) => page,
+      ),
+    );
+  }
+
+  void pushAndRemoveUntil(Widget page) {
+    Navigator.pushAndRemoveUntil(
+      this,
+      MaterialPageRoute(
+        builder: (context) => page,
+      ),
+      (route) => false,
+    );
+  }
 }
