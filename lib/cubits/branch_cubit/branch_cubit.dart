@@ -2,12 +2,15 @@ import 'package:barber_shop/models/user_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 part 'branch_state.dart';
 
 class BranchCubit extends Cubit<BranchState> {
   BranchCubit() : super(BranchInitial());
+
+  late UserModel userInfo;
 
   Future<void> checkUserBranch() async {
     emit(BranchLoading());
@@ -31,7 +34,9 @@ class BranchCubit extends Cubit<BranchState> {
       final userData = userDoc.data() as Map<String, dynamic>?;
 
       // Create UserModel instance from Firestore data
-      final userModel = UserModel.fromJson(userData);
+      final UserModel userModel = UserModel.fromJson(userData);
+
+      userInfo = userModel;
 
       // Emit the BranchAssigned state with the UserModel
       emit(BranchAssigned(userModel: userModel));

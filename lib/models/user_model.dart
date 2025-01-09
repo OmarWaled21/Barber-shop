@@ -25,11 +25,11 @@ class UserModel {
 
   factory UserModel.fromJson(json) {
     return UserModel(
-      name: 'name',
-      email: 'email',
-      phone: 'phone',
-      branchId: 'branch_id',
-      branchLocation: 'branch_location',
+      name: json['name'],
+      email: json['email'],
+      phone: json['phone'],
+      branchId: json['branch_id'],
+      branchLocation: json['branch_location'],
     );
   }
 }
