@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:barber_shop/constants/assets.gen.dart';
 import 'package:barber_shop/constants/colors.dart';
 import 'package:barber_shop/cubits/initialize_cubit/initialize_cubit.dart';
@@ -8,7 +7,7 @@ import 'package:barber_shop/helper/navigator_extention.dart';
 import 'package:barber_shop/helper/show_snack_bar.dart';
 import 'package:barber_shop/models/user_model.dart';
 import 'package:barber_shop/services/register_service.dart';
-import 'package:barber_shop/views/home_view.dart';
+import 'package:barber_shop/views/choose_branch_view.dart';
 import 'package:barber_shop/widgets/custom_button.dart';
 import 'package:barber_shop/widgets/custom_text_form_field.dart';
 import 'package:barber_shop/widgets/custom_text_form_field_password.dart';
@@ -142,7 +141,7 @@ class _LoginViewBodyState extends State<RegisterViewBody> {
         initializeCubit.assignUserModel(user);
         debugPrint('User registered successfully: ${user.name}');
       }
-      context.pushAndRemoveUntil(const HomeView());
+      context.push(const ChooseBranchView());
     } catch (e) {
       debugPrint("Registration failed: $e");
     }

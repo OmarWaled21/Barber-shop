@@ -1,5 +1,7 @@
 import 'package:barber_shop/models/branch_model.dart';
+import 'package:barber_shop/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:map_launcher/map_launcher.dart';
 
@@ -18,6 +20,21 @@ class BranchServices {
     } catch (e) {
       debugPrint(e.toString());
       return [];
+    }
+  }
+
+  Future<void> saveBranch(UserModel userModel) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user!.uid)
+          .update({
+        'branch_govern': userModel.branchGovern,
+        'branch_location': userModel.branchLocation,
+      });
+    } catch (e) {
+      throw Exception('Failed to save branch: $e');
     }
   }
 

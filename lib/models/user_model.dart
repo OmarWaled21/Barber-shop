@@ -3,14 +3,14 @@ class UserModel {
   final String email;
   final String phone;
   final String? branchLocation;
-  final String? branchId;
+  final String? branchGovern;
 
   UserModel({
     required this.name,
     required this.email,
     required this.phone,
     this.branchLocation,
-    this.branchId,
+    this.branchGovern,
   });
 
   Map<String, dynamic> toJson() {
@@ -18,7 +18,7 @@ class UserModel {
       'name': name,
       'email': email,
       'phone': phone,
-      'branch_id': branchId,
+      'branch_govern': branchGovern,
       'branch_location': branchLocation,
     };
   }
@@ -28,7 +28,7 @@ class UserModel {
       name: json['name'],
       email: json['email'],
       phone: json['phone'],
-      branchId: json['branch_id'],
+      branchGovern: json['branch_govern'],
       branchLocation: json['branch_location'],
     );
   }

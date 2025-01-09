@@ -5,7 +5,8 @@ import 'package:barber_shop/widgets/branch_details_container.dart';
 import 'package:flutter/widgets.dart';
 
 class ChoosrBranchListView extends StatefulWidget {
-  const ChoosrBranchListView({super.key});
+  const ChoosrBranchListView({super.key, required this.onBranchSelected});
+  final Function(BranchModel) onBranchSelected;
 
   @override
   State<ChoosrBranchListView> createState() => _ChoosrBranchListViewState();
@@ -28,6 +29,7 @@ class _ChoosrBranchListViewState extends State<ChoosrBranchListView> {
               return GestureDetector(
                 onTap: () {
                   setState(() => selectedIndex = index);
+                  widget.onBranchSelected(branches[index]); // Notify parent
                 },
                 child: BranchDetailsContainer(
                   isSelected: selectedIndex == index,
