@@ -5,6 +5,8 @@ import 'package:barber_shop/constants/colors.dart';
 import 'package:barber_shop/helper/media_query_extention.dart';
 import 'package:barber_shop/helper/navigator_extention.dart';
 import 'package:barber_shop/helper/show_snack_bar.dart';
+import 'package:barber_shop/models/user_model.dart';
+import 'package:barber_shop/services/register_service.dart';
 import 'package:barber_shop/views/home_view.dart';
 import 'package:barber_shop/widgets/custom_button.dart';
 import 'package:barber_shop/widgets/custom_text_form_field.dart';
@@ -25,8 +27,12 @@ class _LoginViewBodyState extends State<RegisterViewBody> {
 
   bool isLoading = false;
 
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+
+  final RegisterService registerService = RegisterService();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +43,7 @@ class _LoginViewBodyState extends State<RegisterViewBody> {
         child: Form(
           key: formKey,
           child: Column(
+            spacing: 16,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(flex: 1),
@@ -44,7 +51,7 @@ class _LoginViewBodyState extends State<RegisterViewBody> {
                 Assets.logo.path,
                 height: context.screenHeight * .2,
               ),
-              const SizedBox(height: 16),
+              // const SizedBox(height: 16),
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -52,25 +59,32 @@ class _LoginViewBodyState extends State<RegisterViewBody> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
-              const SizedBox(height: 16),
+              // const SizedBox(height: 16),
+              CustomTextFormField(
+                title: 'Name',
+                textEditingController: nameController,
+              ),
+              CustomTextFormField(
+                title: 'Phone',
+                textEditingController: phoneController,
+                keyboardType: TextInputType.phone,
+              ),
               CustomTextFormField(
                 title: 'Email',
                 textEditingController: emailController,
                 keyboardType: TextInputType.emailAddress,
               ),
-              const SizedBox(height: 16),
+              // const SizedBox(height: 16),
               CustomTextFormFieldPassword(
                 title: 'Password',
                 textEditingController: passwordController,
               ),
-              const SizedBox(height: 16),
+              // const SizedBox(height: 16),
               Row(
                 children: [
                   const Text("Already have an account?"),
                   GestureDetector(
-                    onTap: () {
-                      context.pop();
-                    },
+                    onTap: () => context.pop(),
                     child: const Text(
                       " Login now",
                       style: TextStyle(color: KColors.darkerYellowColor),
@@ -78,7 +92,7 @@ class _LoginViewBodyState extends State<RegisterViewBody> {
                   ),
                 ],
               ),
-              const SizedBox(height: 64),
+              const SizedBox(height: 16),
               CustomButton(
                 title: 'Register',
                 onPressed: () async {
@@ -110,10 +124,20 @@ class _LoginViewBodyState extends State<RegisterViewBody> {
   }
 
   Future<void> registerMethod() async {
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: emailController.text,
-      password: passwordController.text,
-    );
-    context.pushAndRemoveUntil(const HomeView());
+    try {
+      UserModel? user = await registerService.register(
+        name: nameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+        phone: phoneController.text,
+      );
+
+      if (user != null) {
+        debugPrint('User registered successfully: ${user.name}');
+      }
+      context.pushAndRemoveUntil(const HomeView());
+    } catch (e) {
+      debugPrint("Registration failed: $e");
+    }
   }
 }
