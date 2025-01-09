@@ -1,9 +1,11 @@
-import 'package:barber_shop/constants/assets.gen.dart';
 import 'package:barber_shop/helper/media_query_extention.dart';
+import 'package:barber_shop/models/service_item_model.dart';
 import 'package:flutter/material.dart';
 
 class ServiceItemCard extends StatelessWidget {
-  const ServiceItemCard({super.key});
+  const ServiceItemCard({super.key, required this.serviceItem});
+
+  final ServiceItemModel serviceItem;
 
   @override
   Widget build(BuildContext context) {
@@ -20,17 +22,19 @@ class ServiceItemCard extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Image.asset(
-                  Assets.cream.path,
+                Image.network(
+                  serviceItem.image,
                   height: context.screenHeight * 0.12,
                 ),
-                const Text(
-                  'Cream Path',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                Text(
+                  serviceItem.title,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                const Text(
-                  '100 L.E',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                Text(
+                  '${serviceItem.price} L.E',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 25),
                 ),
               ],
             ),

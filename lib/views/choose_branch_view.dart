@@ -18,6 +18,7 @@ class ChooseBranchView extends StatefulWidget {
   State<ChooseBranchView> createState() => _ChooseBranchViewState();
 }
 
+String? selectedBranchID;
 String? selectedBranchGovern;
 String? selectedBranchLocation;
 
@@ -44,6 +45,7 @@ class _ChooseBranchViewState extends State<ChooseBranchView> {
                 setState(() {
                   selectedBranchGovern = branch.govern;
                   selectedBranchLocation = branch.desc;
+                  selectedBranchID = branch.id;
                 });
               },
             ),
@@ -66,6 +68,7 @@ class _ChooseBranchViewState extends State<ChooseBranchView> {
                         name: user.name,
                         email: user.email,
                         phone: user.phone,
+                        branchID: selectedBranchID,
                         branchGovern: selectedBranchGovern,
                         branchLocation: selectedBranchLocation,
                       ),

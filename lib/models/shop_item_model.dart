@@ -1,10 +1,10 @@
-class ServiceItemModel {
+class ShopItemModel {
   final String title;
   final String desc;
   final String price;
   final String image;
 
-  ServiceItemModel({
+  ShopItemModel({
     required this.title,
     required this.desc,
     required this.price,

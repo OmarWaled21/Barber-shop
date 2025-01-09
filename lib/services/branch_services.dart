@@ -13,7 +13,7 @@ class BranchServices {
           .orderBy('govern')
           .get();
       final branches = querySnapshot.docs.map((doc) {
-        return BranchModel.fromJson(doc.data());
+        return BranchModel.fromFireStore(doc);
       }).toList();
 
       return branches;
@@ -30,6 +30,7 @@ class BranchServices {
           .collection('users')
           .doc(user!.uid)
           .update({
+        'branch_id': userModel.branchID,
         'branch_govern': userModel.branchGovern,
         'branch_location': userModel.branchLocation,
       });
