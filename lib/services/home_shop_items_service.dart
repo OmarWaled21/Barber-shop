@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeShopItemsService {
-  Future<List<ShopItemModel>> getServiceItems() async {
+  Future<List<ShopItemModel>> getShoptems() async {
     try {
       // Step 1: Get the currently logged-in user
       User? user = FirebaseAuth.instance.currentUser;
