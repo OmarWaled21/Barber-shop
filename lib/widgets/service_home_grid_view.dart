@@ -6,14 +6,19 @@ import 'package:barber_shop/widgets/service_item_card.dart';
 import 'package:flutter/material.dart';
 
 class ServiceHomeGridView extends StatefulWidget {
-  const ServiceHomeGridView({super.key});
+  const ServiceHomeGridView(
+      {super.key,
+      required this.selectedServices,
+      required this.onToggleSelection});
+
+  final Set<ServiceItemModel> selectedServices;
+  final Function(ServiceItemModel) onToggleSelection;
 
   @override
   State<ServiceHomeGridView> createState() => _ServiceHomeGridViewState();
 }
 
 class _ServiceHomeGridViewState extends State<ServiceHomeGridView> {
-  final Set<ServiceItemModel> _selectedServices = {};
   late final Future<List<ServiceItemModel>> _serviceItemModel;
 
   @override
@@ -50,23 +55,14 @@ class _ServiceHomeGridViewState extends State<ServiceHomeGridView> {
             itemBuilder: (context, index) {
               return ServiceItemCard(
                 serviceItem: serviceItems[index],
-                isSelected: _selectedServices.contains(serviceItems[index]),
-                onSelected: () => _toggleSelection(serviceItems[index]),
+                isSelected:
+                    widget.selectedServices.contains(serviceItems[index]),
+                onSelected: () => widget.onToggleSelection(serviceItems[index]),
               );
             },
           ),
         );
       },
     );
-  }
-
-  void _toggleSelection(ServiceItemModel serviceItem) {
-    setState(() {
-      if (_selectedServices.contains(serviceItem)) {
-        _selectedServices.remove(serviceItem);
-      } else {
-        _selectedServices.add(serviceItem);
-      }
-    });
   }
 }
