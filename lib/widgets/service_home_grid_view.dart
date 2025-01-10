@@ -1,5 +1,6 @@
 import 'package:barber_shop/models/service_item_model.dart';
 import 'package:barber_shop/services/home_service_items_service.dart';
+import 'package:barber_shop/views/loading_view.dart';
 import 'package:barber_shop/widgets/service_item_card.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class ServiceHomeGridView extends StatelessWidget {
       future: HomeServiceItemsService().getServiceItems(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Expanded(child: LoadingView());
         }
 
         if (snapshot.hasError ||
@@ -27,7 +28,7 @@ class ServiceHomeGridView extends StatelessWidget {
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, mainAxisSpacing: 20, mainAxisExtent: 200),
-            itemCount: 4,
+            itemCount: serviceItems.length,
             itemBuilder: (context, index) {
               return ServiceItemCard(serviceItem: serviceItems[index]);
             },

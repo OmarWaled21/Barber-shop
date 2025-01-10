@@ -1,4 +1,5 @@
 import 'package:barber_shop/models/shop_item_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ShopItemCard extends StatelessWidget {
@@ -16,7 +17,7 @@ class ShopItemCard extends StatelessWidget {
               const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           leading: Padding(
             padding: const EdgeInsets.only(right: 8),
-            child: Image.network(shopItem.image),
+            child: CachedNetworkImage(imageUrl: shopItem.image),
           ),
           title: Text(
             shopItem.title,

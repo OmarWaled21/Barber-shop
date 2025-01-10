@@ -1,5 +1,6 @@
 import 'package:barber_shop/helper/media_query_extention.dart';
 import 'package:barber_shop/models/service_item_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ServiceItemCard extends StatelessWidget {
@@ -22,8 +23,8 @@ class ServiceItemCard extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Image.network(
-                  serviceItem.image,
+                CachedNetworkImage(
+                  imageUrl: serviceItem.image,
                   height: context.screenHeight * 0.12,
                 ),
                 Text(
