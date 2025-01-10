@@ -6,7 +6,13 @@ import 'package:barber_shop/widgets/shop_item_card.dart';
 import 'package:flutter/material.dart';
 
 class ShopHomeGridView extends StatefulWidget {
-  const ShopHomeGridView({super.key});
+  const ShopHomeGridView({
+    super.key,
+    required this.selectedShopItem,
+    required this.onToggleSelection,
+  });
+  final Set<ShopItemModel> selectedShopItem;
+  final Function(ShopItemModel) onToggleSelection;
 
   @override
   State<ShopHomeGridView> createState() => _ShopHomeGridViewState();
@@ -14,7 +20,6 @@ class ShopHomeGridView extends StatefulWidget {
 
 class _ShopHomeGridViewState extends State<ShopHomeGridView> {
   late final Future<List<ShopItemModel>> _getShopItem;
-  final Set<ShopItemModel> _selectedShopItem = {};
 
   @override
   void initState() {
@@ -47,23 +52,13 @@ class _ShopHomeGridViewState extends State<ShopHomeGridView> {
             itemBuilder: (context, index) {
               return ShopItemCard(
                 shopItem: shopItems[index],
-                onSelected: () => _toggleSelection(shopItems[index]),
-                isSelected: _selectedShopItem.contains(shopItems[index]),
+                onSelected: () => widget.onToggleSelection(shopItems[index]),
+                isSelected: widget.selectedShopItem.contains(shopItems[index]),
               );
             },
           ),
         );
       },
     );
-  }
-
-  void _toggleSelection(ShopItemModel shopItem) {
-    setState(() {
-      if (_selectedShopItem.contains(shopItem)) {
-        _selectedShopItem.remove(shopItem);
-      } else {
-        _selectedShopItem.add(shopItem);
-      }
-    });
   }
 }

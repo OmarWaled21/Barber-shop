@@ -6,10 +6,11 @@ import 'package:barber_shop/widgets/service_item_card.dart';
 import 'package:flutter/material.dart';
 
 class ServiceHomeGridView extends StatefulWidget {
-  const ServiceHomeGridView(
-      {super.key,
-      required this.selectedServices,
-      required this.onToggleSelection});
+  const ServiceHomeGridView({
+    super.key,
+    required this.selectedServices,
+    required this.onToggleSelection,
+  });
 
   final Set<ServiceItemModel> selectedServices;
   final Function(ServiceItemModel) onToggleSelection;
