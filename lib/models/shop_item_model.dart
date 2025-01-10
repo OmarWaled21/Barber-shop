@@ -1,7 +1,7 @@
 class ShopItemModel {
   final String title;
   final String desc;
-  final String price;
+  final dynamic price;
   final String image;
 
   ShopItemModel({
@@ -10,4 +10,13 @@ class ShopItemModel {
     required this.price,
     required this.image,
   });
+
+  factory ShopItemModel.fromJson(json) {
+    return ShopItemModel(
+      title: json['title'],
+      desc: json['desc'],
+      price: json['price'],
+      image: json['image'],
+    );
+  }
 }

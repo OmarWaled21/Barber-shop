@@ -1,8 +1,10 @@
-import 'package:barber_shop/constants/assets.gen.dart';
+import 'package:barber_shop/models/shop_item_model.dart';
 import 'package:flutter/material.dart';
 
 class ShopItemCard extends StatelessWidget {
-  const ShopItemCard({super.key});
+  const ShopItemCard({super.key, required this.shopItem});
+
+  final ShopItemModel shopItem;
 
   @override
   Widget build(BuildContext context) {
@@ -14,24 +16,24 @@ class ShopItemCard extends StatelessWidget {
               const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           leading: Padding(
             padding: const EdgeInsets.only(right: 8),
-            child: Image.asset(Assets.hairCut.path),
+            child: Image.network(shopItem.image),
           ),
-          title: const Text(
-            'Secissors',
-            style: TextStyle(
+          title: Text(
+            shopItem.title,
+            style: const TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.bold,
             ),
           ),
-          subtitle: const Text(
-            'a test description',
+          subtitle: Text(
+            shopItem.desc,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 18),
+            style: const TextStyle(fontSize: 18),
           ),
-          trailing: const Text(
-            '15 L.E',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+          trailing: Text(
+            '${shopItem.price} L.E',
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
           ),
         ),
       ),
