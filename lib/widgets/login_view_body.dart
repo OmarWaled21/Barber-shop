@@ -1,17 +1,18 @@
 import 'dart:developer';
-
 import 'package:barber_shop/constants/assets.gen.dart';
 import 'package:barber_shop/constants/colors.dart';
+import 'package:barber_shop/cubits/initialize_cubit/initialize_cubit.dart';
 import 'package:barber_shop/helper/media_query_extention.dart';
 import 'package:barber_shop/helper/navigator_extention.dart';
 import 'package:barber_shop/helper/show_snack_bar.dart';
+import 'package:barber_shop/services/login_service.dart';
 import 'package:barber_shop/views/home_view.dart';
 import 'package:barber_shop/views/register_view.dart';
 import 'package:barber_shop/widgets/custom_button.dart';
 import 'package:barber_shop/widgets/custom_text_form_field.dart';
 import 'package:barber_shop/widgets/custom_text_form_field_password.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class LoginViewBody extends StatefulWidget {
@@ -23,11 +24,11 @@ class LoginViewBody extends StatefulWidget {
 
 class _LoginViewBodyState extends State<LoginViewBody> {
   final GlobalKey<FormState> formKey = GlobalKey();
-
   bool isLoading = false;
-
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  final LoginService loginService = LoginService(); // Initialize the service
 
   @override
   Widget build(BuildContext context) {
@@ -94,29 +95,23 @@ class _LoginViewBodyState extends State<LoginViewBody> {
     setState(() => isLoading = true);
     if (formKey.currentState!.validate()) {
       try {
-        await loginMethod();
-      } on FirebaseAuthException catch (e) {
-        log('err code: ${e.code}');
-        if (e.code == 'user-not-found') {
-          showSnackBar(context, 'No user found for this email.');
-        } else if (e.code == 'wrong-password') {
-          showSnackBar(context, 'Wrong password provided for that user.');
-        } else if (e.code == 'invalid-credential') {
-          showSnackBar(context, 'Wrong Email or password');
+        final userModel = await loginService.loginWithEmailPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+
+        // Call the InitializeCubit to assign the UserModel
+        if (userModel != null) {
+          context.read<InitializeCubit>().assignUserModel(userModel);
         }
+
+        // Navigate to the HomeView and remove previous screens from the stack
+        context.pushAndRemoveUntil(const HomeView());
       } catch (e) {
-        log('err msg: $e');
+        log('Error during login: $e');
+        showSnackBar(context, 'Login failed. Please try again.');
       }
     }
     setState(() => isLoading = false);
-  }
-
-  Future<void> loginMethod() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailController.text,
-      password: passwordController.text,
-    );
-
-    context.pushAndRemoveUntil(const HomeView());
   }
 }
