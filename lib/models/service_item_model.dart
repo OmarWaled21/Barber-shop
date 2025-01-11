@@ -13,4 +13,12 @@ class ServiceItemModel {
       image: json['image'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'price': price,
+      'image': image,
+    };
+  }
 }

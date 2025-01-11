@@ -2,6 +2,7 @@ import 'package:barber_shop/helper/media_query_extention.dart';
 import 'package:barber_shop/helper/navigator_extention.dart';
 import 'package:barber_shop/services/add_2_calender_service.dart';
 import 'package:barber_shop/services/time_day_service.dart';
+import 'package:barber_shop/views/confirm_view.dart';
 import 'package:barber_shop/views/day_selector_view.dart';
 import 'package:barber_shop/views/time_selector_view.dart';
 import 'package:barber_shop/widgets/custom_app_bar.dart';
@@ -61,6 +62,7 @@ class _BookingDateViewState extends State<BookingDateView> {
                   ? () async {
                       await _changeAvailablity();
                       _addToCalendar();
+                      context.push(const ConfirmView());
                     }
                   : null,
               title: 'Continue',

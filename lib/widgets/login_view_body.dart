@@ -38,53 +38,55 @@ class _LoginViewBodyState extends State<LoginViewBody> {
         padding: EdgeInsets.symmetric(horizontal: context.screenWidth * 0.04),
         child: Form(
           key: formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(flex: 1),
-              Image.asset(
-                Assets.logo.path,
-                height: context.screenHeight * .2,
-              ),
-              const SizedBox(height: 16),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Login',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: context.screenHeight * 0.025),
+                Image.asset(
+                  Assets.logo.path,
+                  height: context.screenHeight * .2,
                 ),
-              ),
-              const SizedBox(height: 16),
-              CustomTextFormField(
-                title: 'Email',
-                textEditingController: emailController,
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: 16),
-              CustomTextFormFieldPassword(
-                title: 'Password',
-                textEditingController: passwordController,
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  const Text("Don't have an account yet?"),
-                  GestureDetector(
-                    onTap: () => context.push(const RegisterView()),
-                    child: const Text(
-                      " Register now",
-                      style: TextStyle(color: KColors.darkerYellowColor),
-                    ),
+                const SizedBox(height: 16),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Login',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                ],
-              ),
-              const SizedBox(height: 64),
-              CustomButton(
-                title: 'Log in',
-                onPressed: loginButton,
-              ),
-              const Spacer(flex: 3)
-            ],
+                ),
+                const SizedBox(height: 16),
+                CustomTextFormField(
+                  title: 'Email',
+                  textEditingController: emailController,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 16),
+                CustomTextFormFieldPassword(
+                  title: 'Password',
+                  textEditingController: passwordController,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    const Text("Don't have an account yet?"),
+                    GestureDetector(
+                      onTap: () => context.push(const RegisterView()),
+                      child: const Text(
+                        " Register now",
+                        style: TextStyle(color: KColors.darkerYellowColor),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 64),
+                SizedBox(height: context.screenHeight * 0.025 * 3),
+                CustomButton(
+                  title: 'Log in',
+                  onPressed: loginButton,
+                ),
+              ],
+            ),
           ),
         ),
       ),

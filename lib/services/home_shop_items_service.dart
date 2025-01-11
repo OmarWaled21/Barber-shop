@@ -1,4 +1,6 @@
+import 'package:barber_shop/models/all_booking_model.dart';
 import 'package:barber_shop/models/shop_item_model.dart';
+import 'package:barber_shop/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +44,57 @@ class HomeShopItemsService {
     } catch (e) {
       debugPrint("Error fetching service items: $e");
       return [];
+    }
+  }
+
+  Future<void> saveBookingHistory({
+    required double totalPrice,
+    required List<ShopItemModel> selectedShopItems,
+  }) async {
+    try {
+      // Get the current user ID
+      final userId = FirebaseAuth.instance.currentUser!.uid;
+
+      // Fetch the user's details
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+
+      // Map user document data to UserModel
+      UserModel userModel =
+          UserModel.fromJson(userDoc.data() as Map<String, dynamic>);
+
+      // Create the booking data model using UserModel data
+      AllBookingModel booking = AllBookingModel(
+        name: userModel.name, // Use the user's name
+        branchGovern: userModel.branchGovern ??
+            'Default Governance', // Use the user's branch govern
+        branchLocation: userModel.branchLocation ??
+            'Default Location', // Use the user's branch location
+        totalPrice: totalPrice.toString(),
+        shopItems: selectedShopItems,
+      );
+
+      // Get reference to Firestore user's history collection
+      final userHistoryRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('history'); // sub-collection for user history
+
+      // Save the booking to Firestore
+      await userHistoryRef.add({
+        'name': booking.name,
+        'branch_govern': booking.branchGovern,
+        'branch_location': booking.branchLocation,
+        'totalPrice': booking.totalPrice,
+        'shopItems':
+            booking.shopItems?.map((shopItem) => shopItem.toJson()).toList(),
+        'createdAt': FieldValue.serverTimestamp(), // Add timestamp
+      });
+      debugPrint("Booking history saved successfully.");
+    } catch (e) {
+      debugPrint("Error saving booking history: $e");
     }
   }
 }

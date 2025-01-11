@@ -11,6 +11,15 @@ class ShopItemModel {
     required this.image,
   });
 
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'desc': desc,
+      'price': price,
+      'image': image,
+    };
+  }
+
   factory ShopItemModel.fromJson(json) {
     return ShopItemModel(
       title: json['title'],

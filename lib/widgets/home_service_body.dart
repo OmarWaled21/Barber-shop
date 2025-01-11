@@ -1,6 +1,7 @@
 import 'package:barber_shop/helper/media_query_extention.dart';
 import 'package:barber_shop/helper/navigator_extention.dart';
 import 'package:barber_shop/models/service_item_model.dart';
+import 'package:barber_shop/services/home_service_items_service.dart';
 import 'package:barber_shop/views/booking_view.dart';
 import 'package:barber_shop/widgets/custom_button.dart';
 import 'package:barber_shop/widgets/service_home_grid_view.dart';
@@ -45,7 +46,7 @@ class _HomeServiceBodyState extends State<HomeServiceBody> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: context.screenWidth * 0.2),
           child: CustomButton(
-            onPressed: () {
+            onPressed: () async {
               if (_selectedServices.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -54,6 +55,16 @@ class _HomeServiceBodyState extends State<HomeServiceBody> {
                 );
                 return;
               }
+
+              // Convert selected services Set to a List
+              List<ServiceItemModel> selectedServicesList =
+                  _selectedServices.toList();
+
+              await HomeServiceItemsService().saveBookingHistory(
+                totalPrice: _totalPrice,
+                selectedServices: selectedServicesList,
+              );
+
               context.push(const BookingDateView());
             },
             title: 'Book',
