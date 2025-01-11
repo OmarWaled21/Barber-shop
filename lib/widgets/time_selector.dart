@@ -1,35 +1,35 @@
 import 'package:barber_shop/helper/media_query_extention.dart';
 import 'package:flutter/material.dart';
 
-class TimeSlotSelector extends StatefulWidget {
-  const TimeSlotSelector({super.key});
+class TimeSlotSelector extends StatelessWidget {
+  final String? selectedSlot;
+  final ValueChanged<String> onSlotSelected;
 
-  @override
-  State<TimeSlotSelector> createState() => _TimeSlotSelectorState();
-}
-
-class _TimeSlotSelectorState extends State<TimeSlotSelector> {
-  int? _selectedSlot;
-
-  // Generate a list of times from 9:00 AM to 11:00 PM
-  final List<String> _timeSlots = List.generate(
-    15, // Number of slots (from 9:00 AM to 11:00 PM)
-    (index) {
-      final hour = 9 + (index); // Calculate the hour
-      final period = hour >= 12 ? 'PM' : 'AM'; // AM/PM
-      final formattedHour =
-          hour > 12 ? hour - 12 : hour; // Convert to 12-hour format
-      return '${formattedHour.toString().padLeft(2, '0')}:00 $period';
-    },
-  );
+  const TimeSlotSelector({
+    super.key,
+    required this.selectedSlot,
+    required this.onSlotSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final currentHour = now.hour;
+
+    final List<String> timeSlots = List.generate(
+      15, // Number of slots (from 9:00 AM to 11:00 PM)
+      (index) {
+        final hour = 9 + index;
+        final period = hour >= 12 ? 'PM' : 'AM';
+        final formattedHour = hour > 12 ? hour - 12 : hour;
+        return '${formattedHour.toString().padLeft(2, '0')}:00 $period';
+      },
+    );
+
     return Padding(
-      padding: EdgeInsets.only(
-        left: context.screenWidth * 0.03,
-        right: context.screenWidth * 0.03,
-        bottom: context.screenHeight * 0.005,
+      padding: EdgeInsets.symmetric(
+        horizontal: context.screenWidth * 0.03,
+        vertical: context.screenHeight * 0.005,
       ),
       child: Card(
         elevation: 0,
@@ -42,27 +42,30 @@ class _TimeSlotSelectorState extends State<TimeSlotSelector> {
             mainAxisSpacing: 10,
             mainAxisExtent: 84,
           ),
-          itemCount: _timeSlots.length, // Use the generated time slots count
+          itemCount: timeSlots.length,
           itemBuilder: (context, index) {
+            final hour = 9 + index; // Convert index to actual hour
+            final timeSlot = timeSlots[index];
+            final isPastHour = hour < currentHour;
+
             return GestureDetector(
-              onTap: () {
-                setState(() {
-                  _selectedSlot = index;
-                });
-              },
+              onTap: isPastHour ? null : () => onSlotSelected(timeSlot),
               child: Container(
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: _selectedSlot == index
-                      ? Colors.yellowAccent.shade700
-                      : Colors.transparent,
+                  color: isPastHour
+                      ? Colors.grey.shade300 // Disabled past hour background
+                      : (selectedSlot == timeSlot
+                          ? Colors.yellowAccent.shade700
+                          : Colors.transparent),
                   border: Border.all(color: Colors.black26),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Text(
-                  _timeSlots[index], // Display the time slot
-                  style: const TextStyle(
+                  timeSlot,
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
+                    color: isPastHour ? Colors.grey : Colors.black,
                   ),
                 ),
               ),
