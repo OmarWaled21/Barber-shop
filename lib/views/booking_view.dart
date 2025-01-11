@@ -1,5 +1,6 @@
 import 'package:barber_shop/helper/media_query_extention.dart';
 import 'package:barber_shop/helper/navigator_extention.dart';
+import 'package:barber_shop/services/add_2_calender_service.dart';
 import 'package:barber_shop/services/time_day_service.dart';
 import 'package:barber_shop/views/day_selector_view.dart';
 import 'package:barber_shop/views/time_selector_view.dart';
@@ -20,9 +21,7 @@ class _BookingDateViewState extends State<BookingDateView> {
 
   void _updateSelectedDay(int day) async {
     setState(() => _selectedDay = day);
-    // Create time slots for the selected day
     await TimeDayService().createTimeSlotsForNewDay(day);
-    // Reset the selected time slot when the day changes
     setState(() => _selectedTimeSlot = null);
   }
 
@@ -50,9 +49,7 @@ class _BookingDateViewState extends State<BookingDateView> {
             child: TimeSlotSelectorView(
               selectedSlot: _selectedTimeSlot,
               onSlotSelected: _updateSelectedTimeSlot,
-              dayStream: TimeDayService().getTimeSlotsStream(
-                _selectedDay,
-              ),
+              dayStream: TimeDayService().getTimeSlotsStream(_selectedDay),
               selectedDate: _selectedDay,
             ),
           ),
@@ -62,11 +59,8 @@ class _BookingDateViewState extends State<BookingDateView> {
             child: CustomButton(
               onPressed: _selectedTimeSlot != null
                   ? () async {
-                      await TimeDayService().updateTimeSlotAvailability(
-                        _selectedDay,
-                        _selectedTimeSlot!,
-                        false,
-                      );
+                      await _changeAvailablity();
+                      _addToCalendar();
                     }
                   : null,
               title: 'Continue',
@@ -75,5 +69,32 @@ class _BookingDateViewState extends State<BookingDateView> {
         ],
       ),
     );
+  }
+
+  Future<void> _changeAvailablity() async {
+    await TimeDayService().updateTimeSlotAvailability(
+      _selectedDay,
+      _selectedTimeSlot!,
+      false,
+    );
+  }
+
+  void _addToCalendar() async {
+    if (_selectedTimeSlot != null) {
+      // Get the parsed start time
+      final startTime = AddToCalendarService()
+          .parseSelectedTimeSlot(_selectedDay, _selectedTimeSlot!);
+
+      // Set the event duration (e.g., 1 hour)
+      final endTime = startTime.add(const Duration(hours: 1));
+
+      // Add the event to the calendar
+      await AddToCalendarService().addEventToCalendar(
+        title: 'Booking Appointment',
+        startTime: startTime,
+        endTime: endTime,
+        description: 'Your booking at Barber Shop',
+      );
+    }
   }
 }
