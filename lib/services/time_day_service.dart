@@ -89,30 +89,24 @@ class TimeDayService {
   }
 
   // Method to fetch time slots for a given day
-  Future<List<TimeSlotModel>> getTimeSlots(int day) async {
-    // Format the day to match the format used in createTimeSlotsForNewDay
+  Stream<List<TimeSlotModel>> getTimeSlotsStream(int day) async* {
     final DateTime today = DateTime.now();
     final String dayFormatted =
         DateFormat('dd_MM_yyyy').format(DateTime(today.year, today.month, day));
 
-    try {
-      final docRef = _firestore
-          .collection('location')
-          .doc(await getBranchId())
-          .collection('time_slots')
-          .doc(dayFormatted);
+    final docRef = _firestore
+        .collection('location')
+        .doc(await getBranchId())
+        .collection('time_slots')
+        .doc(dayFormatted);
 
-      final docSnapshot = await docRef.get();
-
+    yield* docRef.snapshots().map((docSnapshot) {
       if (docSnapshot.exists) {
         final timeSlotsMap = Map<String, bool>.from(docSnapshot.data() as Map);
 
-        // Sort the Map entries based on time in a 24-hour format
         final sortedEntries = timeSlotsMap.entries.toList()
           ..sort((a, b) {
-            // Convert time slots to 24-hour format for comparison
-            final timeA =
-                a.key.split(' '); // Split to get hour, minute, and AM/PM
+            final timeA = a.key.split(' ');
             final timeB = b.key.split(' ');
 
             final hourA = int.parse(timeA[0].split(':')[0]);
@@ -121,16 +115,14 @@ class TimeDayService {
             final minuteA = int.parse(timeA[0].split(':')[1]);
             final minuteB = int.parse(timeB[0].split(':')[1]);
 
-            final periodA = timeA[1]; // AM/PM
+            final periodA = timeA[1];
             final periodB = timeB[1];
 
-            // Convert hour to 24-hour format based on AM/PM
             final adjustedHourA =
                 (periodA == 'PM' && hourA != 12) ? hourA + 12 : hourA;
             final adjustedHourB =
                 (periodB == 'PM' && hourB != 12) ? hourB + 12 : hourB;
 
-            // Compare by 24-hour format time
             if (adjustedHourA != adjustedHourB) {
               return adjustedHourA - adjustedHourB;
             } else {
@@ -138,7 +130,6 @@ class TimeDayService {
             }
           });
 
-        // Convert the sorted entries back into a List of TimeSlotModel
         return sortedEntries
             .map((entry) => TimeSlotModel.fromMap(entry))
             .toList();
@@ -146,9 +137,29 @@ class TimeDayService {
         log("Document does not exist for $dayFormatted");
         return [];
       }
+    });
+  }
+
+  // Update the availability of a specific time slot in Firebase
+  Future<void> updateTimeSlotAvailability(
+      int day, String timeSlot, bool isAvailable) async {
+    // Format the date to match the document name, e.g., "11_01_2025"
+    final dateDocName =
+        "${day.toString().padLeft(2, '0')}_01_2025"; // Example format
+
+    // Reference to the specific time slot document
+    final timeSlotRef = _firestore
+        .collection('location') // Top-level collection
+        .doc(await getBranchId()) // Branch-specific document
+        .collection('time_slots') // Collection of time slots
+        .doc(dateDocName); // Document for the selected date (e.g., 11_01_2025)
+
+    try {
+      // Update the isAvailable field of the time slot
+      await timeSlotRef.update({timeSlot: isAvailable});
+      log('Time slot updated successfully');
     } catch (e) {
-      log("Error fetching time slots: $e");
-      return [];
+      log('Error updating time slot: $e');
     }
   }
 }
