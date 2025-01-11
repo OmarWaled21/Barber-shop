@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:barber_shop/models/time_slots_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart'; // For formatting the date
@@ -31,12 +32,11 @@ class TimeDayService {
   }
 
   // Method to check if a time slots document exists for a given day
-  Future<bool> checkIfTimeSlotExists(
-      String branchId, String dayFormatted) async {
+  Future<bool> checkIfTimeSlotExists(String dayFormatted) async {
     try {
       final docRef = _firestore
           .collection('location')
-          .doc(branchId)
+          .doc(await getBranchId())
           .collection('time_slots')
           .doc(dayFormatted);
 
@@ -49,14 +49,16 @@ class TimeDayService {
   }
 
   // Method to create a new day's document with time slots
-  Future<void> createTimeSlotsForNewDay() async {
+  Future<void> createTimeSlotsForNewDay(int day) async {
     // Get today's date
     final DateTime today = DateTime.now();
-    final String dayFormatted = DateFormat('dd_MM_yyyy').format(today);
 
-    // Step 4: Check if the document already exists
-    final documentExists =
-        await checkIfTimeSlotExists(await getBranchId(), dayFormatted);
+    // Format the date using the provided day and current month/year
+    final String dayFormatted =
+        DateFormat('dd_MM_yyyy').format(DateTime(today.year, today.month, day));
+
+    // Step 1: Check if the document already exists
+    final documentExists = await checkIfTimeSlotExists(dayFormatted);
 
     if (documentExists) {
       log("Document already exists for $dayFormatted");
@@ -71,18 +73,82 @@ class TimeDayService {
       timeSlots[timeSlot] = true; // Defaulting each time slot to true
     }
 
-    // Create a new document in the 'time_slots' collection with today's date
+    // Create a new document in the 'time_slots' collection with the selected date
     try {
       await _firestore
           .collection('location') // Location collection
           .doc(await getBranchId()) // Branch document
           .collection('time_slots') // Time slots sub-collection
-          .doc(dayFormatted) // Document for today's date (dd_MM_yyyy)
+          .doc(dayFormatted) // Document for the selected day (dd_MM_yyyy)
           .set(timeSlots);
 
       log("Document created for $dayFormatted");
     } catch (e) {
       log("Error creating document: $e");
+    }
+  }
+
+  // Method to fetch time slots for a given day
+  Future<List<TimeSlotModel>> getTimeSlots(int day) async {
+    // Format the day to match the format used in createTimeSlotsForNewDay
+    final DateTime today = DateTime.now();
+    final String dayFormatted =
+        DateFormat('dd_MM_yyyy').format(DateTime(today.year, today.month, day));
+
+    try {
+      final docRef = _firestore
+          .collection('location')
+          .doc(await getBranchId())
+          .collection('time_slots')
+          .doc(dayFormatted);
+
+      final docSnapshot = await docRef.get();
+
+      if (docSnapshot.exists) {
+        final timeSlotsMap = Map<String, bool>.from(docSnapshot.data() as Map);
+
+        // Sort the Map entries based on time in a 24-hour format
+        final sortedEntries = timeSlotsMap.entries.toList()
+          ..sort((a, b) {
+            // Convert time slots to 24-hour format for comparison
+            final timeA =
+                a.key.split(' '); // Split to get hour, minute, and AM/PM
+            final timeB = b.key.split(' ');
+
+            final hourA = int.parse(timeA[0].split(':')[0]);
+            final hourB = int.parse(timeB[0].split(':')[0]);
+
+            final minuteA = int.parse(timeA[0].split(':')[1]);
+            final minuteB = int.parse(timeB[0].split(':')[1]);
+
+            final periodA = timeA[1]; // AM/PM
+            final periodB = timeB[1];
+
+            // Convert hour to 24-hour format based on AM/PM
+            final adjustedHourA =
+                (periodA == 'PM' && hourA != 12) ? hourA + 12 : hourA;
+            final adjustedHourB =
+                (periodB == 'PM' && hourB != 12) ? hourB + 12 : hourB;
+
+            // Compare by 24-hour format time
+            if (adjustedHourA != adjustedHourB) {
+              return adjustedHourA - adjustedHourB;
+            } else {
+              return minuteA - minuteB;
+            }
+          });
+
+        // Convert the sorted entries back into a List of TimeSlotModel
+        return sortedEntries
+            .map((entry) => TimeSlotModel.fromMap(entry))
+            .toList();
+      } else {
+        log("Document does not exist for $dayFormatted");
+        return [];
+      }
+    } catch (e) {
+      log("Error fetching time slots: $e");
+      return [];
     }
   }
 }

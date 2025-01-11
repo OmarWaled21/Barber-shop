@@ -3,8 +3,9 @@ import 'package:barber_shop/helper/media_query_extention.dart';
 import 'package:barber_shop/widgets/day_header_row.dart';
 import 'package:flutter/material.dart';
 
-class DaySelector extends StatelessWidget {
-  const DaySelector({super.key, this.selectedDay, required this.onDaySelected});
+class DaySelectorView extends StatelessWidget {
+  const DaySelectorView(
+      {super.key, this.selectedDay, required this.onDaySelected});
 
   final int? selectedDay;
   final ValueChanged<int> onDaySelected;
