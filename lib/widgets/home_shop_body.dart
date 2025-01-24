@@ -52,35 +52,13 @@ class _HomeShopBodyState extends State<HomeShopBody> {
           child: CustomButton(
             onPressed: () async {
               if (_shopItem.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Please select at least one service."),
-                  ),
-                );
-                return;
+                showSnackBar(context, "Please select at least one service.");
               }
 
-              // Convert selected services Set to a List
-              List<ShopItemModel> selectedShopItems = _shopItem.toList();
+              await addShopItemsInCurrentBooking();
 
-              await HomeShopItemsService.instance.saveBookingHistory(
-                totalPrice: _totalPrice,
-                selectedShopItems: selectedShopItems,
-              );
-
-              final User? user = FirebaseAuth.instance.currentUser;
-              if (user == null) {
-                throw Exception("User not logged in");
-              }
-              final userDoc = await FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(user.uid)
-                  .get();
-
-              final userLocation = userDoc['location'] as String;
-
+              String userLocation = await getUserLocation();
               if (userLocation.isEmpty) {
-                // TODO: Implement location dialog
                 showSnackBar(
                     context, "Please update your location in the profile.");
               } else {
@@ -92,5 +70,29 @@ class _HomeShopBodyState extends State<HomeShopBody> {
         ),
       ],
     );
+  }
+
+  Future<void> addShopItemsInCurrentBooking() async {
+    // Convert selected services Set to a List
+    List<ShopItemModel> selectedShopItems = _shopItem.toList();
+
+    await HomeShopItemsService.instance.saveBookingHistory(
+      totalPrice: _totalPrice,
+      selectedShopItems: selectedShopItems,
+    );
+  }
+
+  Future<String> getUserLocation() async {
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw Exception("User not logged in");
+    }
+    final userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+
+    final String userLocation = userDoc['location'] as String;
+    return userLocation;
   }
 }
