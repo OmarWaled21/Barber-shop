@@ -8,6 +8,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({super.key});
 
+  String getGreeting() {
+    final int hour = DateTime.now().hour;
+
+    if (hour >= 5 && hour < 12) {
+      return 'Good Morning';
+    } else if (hour >= 12 && hour < 18) {
+      return 'Good Afternoon';
+    } else {
+      return 'Good Evening';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,7 +37,7 @@ class HomeAppBar extends StatelessWidget {
             ),
           ],
           title: Text(
-            'Good Morning',
+            getGreeting(),
             style: TextStyle(
               fontSize: context.devicePixelRatio * 8,
               color: KColors.darkerYellowColor,
