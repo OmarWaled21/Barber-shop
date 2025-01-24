@@ -31,14 +31,15 @@ class ShopItemCard extends StatelessWidget {
               children: [
                 CachedNetworkImage(
                   imageUrl: shopItem.image,
-                  height: 70,
+                  height: context.devicePixelRatio * 20,
                 ),
                 DescShopItemColumn(shopItem: shopItem),
                 const Spacer(),
                 Text(
                   '${shopItem.price} L.E',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 26),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: context.devicePixelRatio * 8),
                 ),
               ],
             ),
@@ -61,8 +62,8 @@ class DescShopItemColumn extends StatelessWidget {
       children: [
         Text(
           shopItem.title,
-          style: const TextStyle(
-            fontSize: 26,
+          style: TextStyle(
+            fontSize: context.devicePixelRatio * 8,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -70,7 +71,7 @@ class DescShopItemColumn extends StatelessWidget {
           shopItem.desc,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: context.devicePixelRatio * 4),
         ),
       ],
     );

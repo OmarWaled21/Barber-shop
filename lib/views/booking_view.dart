@@ -39,7 +39,10 @@ class _BookingDateViewState extends State<BookingDateView> {
           CustomAppBar(
             title: 'Choose your Day',
             leading: IconButton(
-              onPressed: () => context.pop(),
+              onPressed: () {
+                context.pop();
+                HomeServiceItemsService.instance.currentBooking = null;
+              },
               icon: const Icon(Icons.arrow_back_ios),
             ),
           ),

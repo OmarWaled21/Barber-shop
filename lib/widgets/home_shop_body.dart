@@ -60,7 +60,7 @@ class _HomeShopBodyState extends State<HomeShopBody> {
               // Convert selected services Set to a List
               List<ShopItemModel> selectedShopItems = _shopItem.toList();
 
-              await HomeShopItemsService().saveBookingHistory(
+              await HomeShopItemsService.instance.saveBookingHistory(
                 totalPrice: _totalPrice,
                 selectedShopItems: selectedShopItems,
               );

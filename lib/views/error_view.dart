@@ -54,7 +54,7 @@ class ErrorView extends StatelessWidget {
                 ),
                 child: const Text(
                   'Go Back',
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),
             ],

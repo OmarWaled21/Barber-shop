@@ -6,7 +6,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeShopItemsService {
-  Future<List<ShopItemModel>> getShoptems() async {
+  // Private constructor
+  HomeShopItemsService._();
+
+  // Static variable to hold the single instance
+  static final HomeShopItemsService _instance = HomeShopItemsService._();
+
+  // Getter to access the single instance
+  static HomeShopItemsService get instance => _instance;
+
+  AllBookingModel? currentBooking; // Store the booking locally
+
+  Future<List<ShopItemModel>> getShopItems() async {
     try {
       // Step 1: Get the currently logged-in user
       User? user = FirebaseAuth.instance.currentUser;
@@ -28,28 +39,28 @@ class HomeShopItemsService {
         throw Exception("Branch ID not found for the user");
       }
 
-      // Step 4: Fetch service items for the branch
+      // Step 4: Fetch shop items for the branch
       final querySnapshot = await FirebaseFirestore.instance
           .collection('location')
           .doc(branchId) // Document for the specific branch
-          .collection('shop') // Sub-collection for services
+          .collection('shop') // Sub-collection for shop
           .get();
 
-      // Map Firestore data to ServiceItemModel
+      // Map Firestore data to ShopItemModel
       final shopItems = querySnapshot.docs.map((doc) {
         return ShopItemModel.fromJson(doc.data());
       }).toList();
 
       return shopItems;
     } catch (e) {
-      debugPrint("Error fetching service items: $e");
+      debugPrint("Error fetching shop items: $e");
       return [];
     }
   }
 
   Future<void> saveBookingHistory({
-    required double totalPrice,
-    required List<ShopItemModel> selectedShopItems,
+    double? totalPrice,
+    List<ShopItemModel>? selectedShopItems,
   }) async {
     try {
       // Get the current user ID
@@ -65,36 +76,28 @@ class HomeShopItemsService {
       UserModel userModel =
           UserModel.fromJson(userDoc.data() as Map<String, dynamic>);
 
-      // Create the booking data model using UserModel data
-      AllBookingModel booking = AllBookingModel(
-        name: userModel.name, // Use the user's name
-        branchGovern: userModel.branchGovern ??
-            'Default Governance', // Use the user's branch govern
-        branchLocation: userModel.branchLocation ??
-            'Default Location', // Use the user's branch location
-        totalPrice: totalPrice.toString(),
-        shopItems: selectedShopItems,
-      );
+      // If currentBooking is null, create a new one, otherwise update existing fields
+      if (currentBooking == null) {
+        currentBooking = AllBookingModel(
+          name: userModel.name,
+          branchGovern: userModel.branchGovern ?? 'Default Governance',
+          branchLocation: userModel.branchLocation ?? 'Default Location',
+          shopItems: selectedShopItems,
+          totalPrice: totalPrice?.toString() ?? '0.0', // Default to 0.0 if null
+        );
+      } else {
+        // You can also update shopItems and totalPrice if they were passed
+        if (selectedShopItems != null) {
+          currentBooking!.shopItems = selectedShopItems;
+        }
+        if (totalPrice != null) {
+          currentBooking!.totalPrice = totalPrice.toString();
+        }
+      }
 
-      // Get reference to Firestore user's history collection
-      final userHistoryRef = FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .collection('history'); // sub-collection for user history
-
-      // Save the booking to Firestore
-      await userHistoryRef.add({
-        'name': booking.name,
-        'branch_govern': booking.branchGovern,
-        'branch_location': booking.branchLocation,
-        'totalPrice': booking.totalPrice,
-        'shopItems':
-            booking.shopItems?.map((shopItem) => shopItem.toJson()).toList(),
-        'createdAt': FieldValue.serverTimestamp(), // Add timestamp
-      });
-      debugPrint("Booking history saved successfully.");
+      debugPrint("Shop booking history updated successfully.");
     } catch (e) {
-      debugPrint("Error saving booking history: $e");
+      debugPrint("Error updating booking history: $e");
     }
   }
 }

@@ -24,7 +24,7 @@ class _ShopHomeGridViewState extends State<ShopHomeGridView> {
   @override
   void initState() {
     super.initState();
-    _getShopItem = HomeShopItemsService().getShoptems();
+    _getShopItem = HomeShopItemsService.instance.getShopItems();
   }
 
   @override
