@@ -7,11 +7,13 @@ class CustomTextFormField extends StatelessWidget {
     required this.title,
     this.textEditingController,
     this.keyboardType = TextInputType.text,
+    this.enabled = true,
   });
 
   final String title;
   final TextEditingController? textEditingController;
   final TextInputType keyboardType;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +37,16 @@ class CustomTextFormField extends StatelessWidget {
       cursorColor: KColors.darkerYellowColor,
       keyboardType: keyboardType,
       decoration: InputDecoration(
+        enabled: enabled,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: KColors.darkerYellowColor),
         ),
         focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: KColors.darkerYellowColor),
+        ),
+        disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: KColors.darkerYellowColor),
         ),

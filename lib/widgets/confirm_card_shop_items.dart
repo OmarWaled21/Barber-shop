@@ -5,10 +5,7 @@ import 'package:barber_shop/widgets/custom_divider.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmCardShopItems extends StatelessWidget {
-  const ConfirmCardShopItems({
-    super.key,
-    required this.currentShopBooking,
-  });
+  const ConfirmCardShopItems({super.key, required this.currentShopBooking});
 
   final AllBookingModel? currentShopBooking;
 

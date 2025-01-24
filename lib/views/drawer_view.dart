@@ -3,6 +3,7 @@ import 'package:barber_shop/helper/media_query_extention.dart';
 import 'package:barber_shop/helper/navigator_extention.dart';
 import 'package:barber_shop/views/choose_branch_view.dart';
 import 'package:barber_shop/views/login_view.dart';
+import 'package:barber_shop/views/profile_view.dart';
 import 'package:barber_shop/widgets/custom_button.dart';
 import 'package:barber_shop/widgets/custom_drawer_header.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,8 +23,7 @@ class DrawerView extends StatelessWidget {
             leading: const Icon(Icons.person),
             title: const Text('Profile'),
             onTap: () {
-              // Add navigation logic for profile
-              context.pop(); // Close the drawer
+              context.push(const ProfileView());
             },
           ),
           ListTile(
