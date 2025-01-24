@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:barber_shop/models/service_item_model.dart';
 import 'package:barber_shop/models/shop_item_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,23 +26,19 @@ class AllBookingModel {
     this.time,
   });
 
-  // Method to fetch user-related fields from Firestore
+  // Fetch user data from Firestore
   Future<void> fetchUserData() async {
     try {
-      // Get the current user ID
       final String userId = FirebaseAuth.instance.currentUser!.uid;
 
-      // Get the document snapshot of the current user's Firestore record
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
           .get();
 
       if (userDoc.exists) {
-        // Retrieve the necessary fields from Firestore
         final userData = userDoc.data() as Map<String, dynamic>;
 
-        // Assign values to the respective fields
         name = userData['name'] ?? 'Default Name';
         branchGovern = userData['branch_govern'] ?? 'Default Governance';
         branchLocation = userData['branch_location'] ?? 'Default Location';
@@ -52,5 +50,35 @@ class AllBookingModel {
     }
   }
 
-  //todo: make the history not created till the confirm is true
+  // Save booking to Firestore only if confirmed
+  Future<void> saveBookingToFirestore() async {
+    try {
+      final String userId = FirebaseAuth.instance.currentUser!.uid;
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('history')
+          .add({
+        'userId': userId,
+        'name': name,
+        'shopItems': shopItems
+            ?.map((item) => item.toJson())
+            .toList(), // Assuming ShopItemModel has toMap
+        'serviceItems': serviceItems
+            ?.map((item) => item.toJson())
+            .toList(), // Assuming ServiceItemModel has toMap
+        'totalPrice': totalPrice,
+        'branchGovern': branchGovern,
+        'branchLocation': branchLocation,
+        'date': date,
+        'time': time,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      log('Booking saved successfully.');
+    } catch (e) {
+      log('Error saving booking: $e');
+    }
+  }
 }

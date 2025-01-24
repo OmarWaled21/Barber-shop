@@ -25,7 +25,7 @@ class _ServiceHomeGridViewState extends State<ServiceHomeGridView> {
   @override
   void initState() {
     super.initState();
-    _serviceItemModel = HomeServiceItemsService().getServiceItems();
+    _serviceItemModel = HomeServiceItemsService.instance.getServiceItems();
   }
 
   @override

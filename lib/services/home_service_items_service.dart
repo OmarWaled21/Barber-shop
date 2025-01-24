@@ -1,11 +1,22 @@
-import 'package:barber_shop/models/service_item_model.dart';
 import 'package:barber_shop/models/all_booking_model.dart';
-import 'package:barber_shop/models/user_model.dart'; // Import the UserModel
+import 'package:barber_shop/models/service_item_model.dart';
+import 'package:barber_shop/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeServiceItemsService {
+  // Private constructor
+  HomeServiceItemsService._();
+
+  // Static variable to hold the single instance
+  static final HomeServiceItemsService _instance = HomeServiceItemsService._();
+
+  // Getter to access the single instance
+  static HomeServiceItemsService get instance => _instance;
+
+  AllBookingModel? currentBooking; // Store the booking locally
+
   Future<List<ServiceItemModel>> getServiceItems() async {
     try {
       // Step 1: Get the currently logged-in user
@@ -48,8 +59,10 @@ class HomeServiceItemsService {
   }
 
   Future<void> saveBookingHistory({
-    required double totalPrice,
-    required List<ServiceItemModel> selectedServices,
+    double? totalPrice,
+    List<ServiceItemModel>? selectedServices,
+    String? selectedDate,
+    String? selectedTime,
   }) async {
     try {
       // Get the current user ID
@@ -65,36 +78,40 @@ class HomeServiceItemsService {
       UserModel userModel =
           UserModel.fromJson(userDoc.data() as Map<String, dynamic>);
 
-      // Create the booking data model using UserModel data
-      AllBookingModel booking = AllBookingModel(
-        name: userModel.name, // Use the user's name
-        branchGovern: userModel.branchGovern ??
-            'Default Governance', // Use the user's branch govern
-        branchLocation: userModel.branchLocation ??
-            'Default Location', // Use the user's branch location
-        totalPrice: totalPrice.toString(),
-        serviceItems: selectedServices,
-      );
+      // Get the current month and year
+      final currentMonth = DateTime.now().month.toString().padLeft(2, '0');
+      final currentYear = DateTime.now().year.toString();
 
-      // Get reference to Firestore user's history collection
-      final userHistoryRef = FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .collection('history'); // sub-collection for user history
+      // If currentBooking is null, create a new one, otherwise update existing fields
+      if (currentBooking == null) {
+        currentBooking = AllBookingModel(
+          name: userModel.name,
+          branchGovern: userModel.branchGovern ?? 'Default Governance',
+          branchLocation: userModel.branchLocation ?? 'Default Location',
+          totalPrice: totalPrice?.toString() ?? '0.0', // Default to 0.0 if null
+          serviceItems: selectedServices ?? [], // Default to empty list if null
+          date:
+              '${selectedDate ?? DateTime.now().day.toString()}/$currentMonth/$currentYear',
+          time: selectedTime,
+        );
+      } else {
+        // Update only the date and time if currentBooking exists
+        currentBooking!.date =
+            '${selectedDate ?? DateTime.now().day.toString()}/$currentMonth/$currentYear';
+        currentBooking!.time = selectedTime ?? currentBooking!.time;
 
-      // Save the booking to Firestore
-      await userHistoryRef.add({
-        'name': booking.name,
-        'branch_govern': booking.branchGovern,
-        'branch_location': booking.branchLocation,
-        'totalPrice': booking.totalPrice,
-        'serviceItems':
-            booking.serviceItems?.map((service) => service.toJson()).toList(),
-        'createdAt': FieldValue.serverTimestamp(), // Add timestamp
-      });
-      debugPrint("Booking history saved successfully.");
+        // You can also update serviceItems and totalPrice if they were passed
+        if (selectedServices != null) {
+          currentBooking!.serviceItems = selectedServices;
+        }
+        if (totalPrice != null) {
+          currentBooking!.totalPrice = totalPrice.toString();
+        }
+      }
+
+      debugPrint("Booking history updated successfully.");
     } catch (e) {
-      debugPrint("Error saving booking history: $e");
+      debugPrint("Error updating booking history: $e");
     }
   }
 }

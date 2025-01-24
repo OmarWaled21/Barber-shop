@@ -1,6 +1,7 @@
 import 'package:barber_shop/helper/media_query_extention.dart';
 import 'package:barber_shop/helper/navigator_extention.dart';
 import 'package:barber_shop/services/add_2_calender_service.dart';
+import 'package:barber_shop/services/home_service_items_service.dart';
 import 'package:barber_shop/services/time_day_service.dart';
 import 'package:barber_shop/views/confirm_view.dart';
 import 'package:barber_shop/views/day_selector_view.dart';
@@ -60,8 +61,8 @@ class _BookingDateViewState extends State<BookingDateView> {
             child: CustomButton(
               onPressed: _selectedTimeSlot != null
                   ? () async {
-                      await _changeAvailablity();
                       _addToCalendar();
+                      _saveBooking();
                       context.push(const ConfirmView());
                     }
                   : null,
@@ -70,14 +71,6 @@ class _BookingDateViewState extends State<BookingDateView> {
           ),
         ],
       ),
-    );
-  }
-
-  Future<void> _changeAvailablity() async {
-    await TimeDayService().updateTimeSlotAvailability(
-      _selectedDay,
-      _selectedTimeSlot!,
-      false,
     );
   }
 
@@ -96,6 +89,20 @@ class _BookingDateViewState extends State<BookingDateView> {
         startTime: startTime,
         endTime: endTime,
         description: 'Your booking at Barber Shop',
+      );
+    }
+  }
+
+  // Save booking with date and time to AllBookingModel
+  void _saveBooking() async {
+    if (_selectedTimeSlot != null) {
+      final bookingDate = _selectedDay.toString(); // Format the day as needed
+      final bookingTime = _selectedTimeSlot!; // Use the selected time slot
+
+      // Save the booking with date and time to AllBookingModel
+      await HomeServiceItemsService.instance.saveBookingHistory(
+        selectedDate: bookingDate, // Pass selected date
+        selectedTime: bookingTime, // Pass selected time
       );
     }
   }

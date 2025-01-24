@@ -19,7 +19,7 @@ class HomeAppBar extends StatelessWidget {
         CustomAppBar(
           title: 'Good Morning',
           centerTitle: false,
-          titleSize: 30,
+          titleSize: context.devicePixelRatio * 8,
           titleColor: KColors.darkerYellowColor,
           actions: [
             IconButton(
@@ -34,14 +34,16 @@ class HomeAppBar extends StatelessWidget {
                 BlocProvider.of<InitializeCubit>(context).userModel;
 
             return Container(
-              padding:
-                  EdgeInsets.only(left: context.screenWidth * 0.04, bottom: 20),
+              padding: EdgeInsets.only(
+                left: context.screenWidth * 0.04,
+              ),
               color: KColors.scaffoldBackGroundColor,
               width: context.screenWidth,
               child: Text(
                 '${user.name.split(' ')[0]} !',
-                style:
-                    const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: context.devicePixelRatio * 8,
+                    fontWeight: FontWeight.bold),
               ),
             );
           },

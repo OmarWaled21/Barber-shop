@@ -60,7 +60,7 @@ class _HomeServiceBodyState extends State<HomeServiceBody> {
               List<ServiceItemModel> selectedServicesList =
                   _selectedServices.toList();
 
-              await HomeServiceItemsService().saveBookingHistory(
+              await HomeServiceItemsService.instance.saveBookingHistory(
                 totalPrice: _totalPrice,
                 selectedServices: selectedServicesList,
               );
