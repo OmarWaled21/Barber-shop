@@ -33,14 +33,15 @@ class DrawerView extends StatelessWidget {
               context.push(const ChooseBranchView()); // Close the drawer
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.history_edu),
-            title: const Text('History'),
-            onTap: () {
-              // Add navigation logic for settings
-              context.pop(); // Close the drawer
-            },
-          ),
+          //todo: history
+          // ListTile(
+          //   leading: const Icon(Icons.history_edu),
+          //   title: const Text('History'),
+          //   onTap: () {
+          //     // Add navigation logic for settings
+          //     context.pop(); // Close the drawer
+          //   },
+          // ),
           const Spacer(),
           Padding(
             padding: EdgeInsets.symmetric(

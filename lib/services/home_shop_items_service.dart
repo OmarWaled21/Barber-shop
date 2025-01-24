@@ -82,6 +82,7 @@ class HomeShopItemsService {
           name: userModel.name,
           branchGovern: userModel.branchGovern ?? 'Default Governance',
           branchLocation: userModel.branchLocation ?? 'Default Location',
+          userLocation: userModel.location ?? '',
           shopItems: selectedShopItems,
           totalPrice: totalPrice?.toString() ?? '0.0', // Default to 0.0 if null
         );

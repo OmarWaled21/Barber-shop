@@ -29,6 +29,7 @@ class HomeAppBar extends StatelessWidget {
             style: TextStyle(
               fontSize: context.devicePixelRatio * 8,
               color: KColors.darkerYellowColor,
+              fontWeight: FontWeight.bold,
             ),
           ),
           centerTitle: false,

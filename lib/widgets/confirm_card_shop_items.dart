@@ -3,6 +3,7 @@ import 'package:barber_shop/models/all_booking_model.dart';
 import 'package:barber_shop/widgets/build_row_confirm_screen.dart';
 import 'package:barber_shop/widgets/custom_divider.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ConfirmCardShopItems extends StatelessWidget {
   const ConfirmCardShopItems({super.key, required this.currentShopBooking});
@@ -53,10 +54,9 @@ class ConfirmCardShopItems extends StatelessWidget {
                 ),
                 BuildRowConfirmScreen(
                   title: 'Location',
-                  value: currentShopBooking!.branchLocation!,
+                  value: currentShopBooking!.userLocation!,
                 ),
                 const CustomDivider(),
-
                 // Items Section
                 const Text(
                   'Items Purchased',
@@ -67,7 +67,6 @@ class ConfirmCardShopItems extends StatelessWidget {
                   value: shopItemsNames,
                 ),
                 const CustomDivider(),
-
                 // Total Price Section
                 const Text(
                   'Total Price',
@@ -76,6 +75,16 @@ class ConfirmCardShopItems extends StatelessWidget {
                 BuildRowConfirmScreen(
                   title: 'Total',
                   value: '${currentShopBooking!.totalPrice} L.E',
+                ),
+                const CustomDivider(),
+                const Text(
+                  'Date and Time',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                BuildRowConfirmScreen(
+                  title: "Date",
+                  value:
+                      "${DateFormat('MMM dd, yyyy').format(DateTime.now().toLocal())} / ${DateFormat().add_jm().format(DateTime.now().toLocal())}",
                 ),
               ],
             ),

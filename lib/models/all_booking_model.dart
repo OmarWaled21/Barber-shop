@@ -12,6 +12,7 @@ class AllBookingModel {
   String? totalPrice;
   String? branchGovern;
   String? branchLocation;
+  String? userLocation;
   String? date;
   String? time;
 
@@ -22,6 +23,7 @@ class AllBookingModel {
     this.totalPrice,
     this.branchGovern,
     this.branchLocation,
+    this.userLocation,
     this.date,
     this.time,
   });
@@ -40,6 +42,7 @@ class AllBookingModel {
         final userData = userDoc.data() as Map<String, dynamic>;
 
         name = userData['name'] ?? 'Default Name';
+        userLocation = userData['location'] ?? '';
         branchGovern = userData['branch_govern'] ?? 'Default Governance';
         branchLocation = userData['branch_location'] ?? 'Default Location';
       } else {
@@ -71,6 +74,7 @@ class AllBookingModel {
         'totalPrice': totalPrice,
         'branchGovern': branchGovern,
         'branchLocation': branchLocation,
+        'location': userLocation,
         'date': date,
         'time': time,
         'createdAt': FieldValue.serverTimestamp(),

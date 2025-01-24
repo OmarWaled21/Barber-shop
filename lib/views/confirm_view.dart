@@ -2,7 +2,9 @@ import 'package:barber_shop/constants/colors.dart';
 import 'package:barber_shop/helper/media_query_extention.dart';
 import 'package:barber_shop/helper/navigator_extention.dart';
 import 'package:barber_shop/services/booking_confirmation_service.dart';
+import 'package:barber_shop/services/booking_confirmation_shop_service.dart';
 import 'package:barber_shop/services/home_service_items_service.dart';
+import 'package:barber_shop/services/home_shop_items_service.dart';
 import 'package:barber_shop/views/home_view.dart';
 import 'package:barber_shop/widgets/confirm_card.dart';
 import 'package:barber_shop/widgets/custom_app_bar.dart';
@@ -37,10 +39,16 @@ class ConfirmView extends StatelessWidget {
               ),
               child: CustomButton(
                 onPressed: () async {
-                  await HomeServiceItemsService.instance.changeAvailablity();
-                  await HomeServiceItemsService.instance
-                      .confirmBooking(context);
-                  context.pushAndRemoveUntil(const HomeView());
+                  if (HomeServiceItemsService.instance.currentBooking != null) {
+                    await HomeServiceItemsService.instance.changeAvailablity();
+                    await HomeServiceItemsService.instance
+                        .confirmBooking(context);
+                    context.pushAndRemoveUntil(const HomeView());
+                  } else if (HomeShopItemsService.instance.currentBooking !=
+                      null) {
+                    await HomeShopItemsService.instance.confirmBooking(context);
+                    context.pushAndRemoveUntil(const HomeView());
+                  }
                 },
                 title: 'Confirm Order',
               ),
