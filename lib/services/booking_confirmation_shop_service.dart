@@ -1,8 +1,10 @@
 import 'dart:developer';
 
-import 'package:barber_shop/helper/show_snack_bar.dart';
+import 'package:barber_shop/helper/navigator_extention.dart';
 import 'package:barber_shop/services/home_shop_items_service.dart';
+import 'package:barber_shop/views/home_view.dart';
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
 
 extension BookingConfirmationService on HomeShopItemsService {
   Future<void> confirmBooking(BuildContext context) async {
@@ -18,10 +20,17 @@ extension BookingConfirmationService on HomeShopItemsService {
       // Clear the currentBooking data after saving
       currentBooking = null;
 
-      showSnackBar(
-          context, "items confirmed and saved successfully!", Colors.green);
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.success,
+        text: 'Items confirmed succefully thanks for using our app',
+        onConfirmBtnTap: () => context.pushAndRemoveUntil(const HomeView()),
+      );
     } catch (e) {
-      showSnackBar(context, "Failed to confirm booking: $e", Colors.red);
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+      );
       log(e.toString());
     }
   }

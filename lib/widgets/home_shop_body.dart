@@ -10,6 +10,7 @@ import 'package:barber_shop/widgets/total_price.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
 
 class HomeShopBody extends StatefulWidget {
   const HomeShopBody({super.key});
@@ -52,7 +53,12 @@ class _HomeShopBodyState extends State<HomeShopBody> {
           child: CustomButton(
             onPressed: () async {
               if (_shopItem.isEmpty) {
-                showSnackBar(context, "Please select at least one service.");
+                QuickAlert.show(
+                  context: context,
+                  text: "Please select at least one service.",
+                  type: QuickAlertType.warning,
+                );
+                return;
               }
 
               await addShopItemsInCurrentBooking();

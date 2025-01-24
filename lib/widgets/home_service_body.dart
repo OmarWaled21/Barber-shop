@@ -7,6 +7,7 @@ import 'package:barber_shop/widgets/custom_button.dart';
 import 'package:barber_shop/widgets/service_home_grid_view.dart';
 import 'package:barber_shop/widgets/total_price.dart';
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
 
 class HomeServiceBody extends StatefulWidget {
   const HomeServiceBody({super.key});
@@ -48,10 +49,10 @@ class _HomeServiceBodyState extends State<HomeServiceBody> {
           child: CustomButton(
             onPressed: () async {
               if (_selectedServices.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Please select at least one service."),
-                  ),
+                QuickAlert.show(
+                  context: context,
+                  text: "Please select at least one service.",
+                  type: QuickAlertType.warning,
                 );
                 return;
               }
