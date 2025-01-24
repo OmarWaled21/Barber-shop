@@ -36,7 +36,7 @@ class _HomeServiceBodyState extends State<HomeServiceBody> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 16,
+      spacing: context.devicePixelRatio * 3,
       children: [
         ServiceHomeGridView(
           selectedServices: _selectedServices,

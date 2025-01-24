@@ -21,9 +21,7 @@ class ServiceItemCard extends StatelessWidget {
     return GestureDetector(
       onTap: onSelected,
       child: Card(
-        margin: EdgeInsets.symmetric(
-          horizontal: context.screenWidth * 0.03,
-        ),
+        margin: EdgeInsets.symmetric(horizontal: context.screenWidth * 0.03),
         color: isSelected ? KColors.mainColor : KColors.scaffoldBackGroundColor,
         child: Padding(
           padding: const EdgeInsets.all(0),
@@ -32,17 +30,21 @@ class ServiceItemCard extends StatelessWidget {
             children: [
               CachedNetworkImage(
                 imageUrl: serviceItem.image,
-                height: context.screenHeight * 0.12,
+                height: context.devicePixelRatio * 25,
               ),
               Text(
                 serviceItem.title,
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: context.devicePixelRatio * 7,
+                ),
               ),
               Text(
                 '${serviceItem.price} L.E',
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: context.devicePixelRatio * 7,
+                ),
               ),
             ],
           ),

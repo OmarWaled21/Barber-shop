@@ -33,25 +33,52 @@ class ConfirmCardShopItems extends StatelessWidget {
             padding: EdgeInsets.all(context.screenWidth * 0.05),
             child: ListView(
               children: [
+                const Center(
+                  child: Text(
+                    'Invoice',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(height: context.screenHeight * 0.02),
+                const Divider(),
+
+                // Client Information Section
+                const Text(
+                  'Client Information',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 BuildRowConfirmScreen(
                   title: 'Name',
                   value: currentShopBooking!.name!,
                 ),
+                BuildRowConfirmScreen(
+                  title: 'Location',
+                  value: currentShopBooking!.branchLocation!,
+                ),
                 const CustomDivider(),
+
+                // Items Section
+                const Text(
+                  'Items Purchased',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 BuildRowConfirmScreen(
                   title: 'Items',
                   value: shopItemsNames,
                 ),
                 const CustomDivider(),
-                BuildRowConfirmScreen(
-                  title: 'Total Price',
-                  value: '${currentShopBooking!.totalPrice} L.E',
+
+                // Total Price Section
+                const Text(
+                  'Total Price',
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                const CustomDivider(),
                 BuildRowConfirmScreen(
-                  title: 'Branch',
-                  value: currentShopBooking!.branchGovern!,
-                  subValue: currentShopBooking!.branchLocation,
+                  title: 'Total',
+                  value: '${currentShopBooking!.totalPrice} L.E',
                 ),
               ],
             ),

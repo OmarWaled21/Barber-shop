@@ -1,4 +1,5 @@
 import 'package:barber_shop/constants/colors.dart';
+import 'package:barber_shop/helper/media_query_extention.dart';
 import 'package:barber_shop/models/service_item_model.dart';
 import 'package:barber_shop/services/home_service_items_service.dart';
 import 'package:barber_shop/views/loading_view.dart';
@@ -50,8 +51,11 @@ class _ServiceHomeGridViewState extends State<ServiceHomeGridView> {
         final List<ServiceItemModel> serviceItems = snapshot.data!;
         return Expanded(
           child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, mainAxisSpacing: 20, mainAxisExtent: 200),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: context.devicePixelRatio * 8,
+              mainAxisExtent: context.devicePixelRatio * 60,
+            ),
             itemCount: serviceItems.length,
             itemBuilder: (context, index) {
               return ServiceItemCard(
