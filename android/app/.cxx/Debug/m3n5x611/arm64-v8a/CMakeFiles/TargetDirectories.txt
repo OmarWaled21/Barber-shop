@@ -1,0 +1,2 @@
+C:/Users/OmarWela/Downloads/Barber-shop-main/android/app/.cxx/Debug/m3n5x611/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/OmarWela/Downloads/Barber-shop-main/android/app/.cxx/Debug/m3n5x611/arm64-v8a/CMakeFiles/rebuild_cache.dir
